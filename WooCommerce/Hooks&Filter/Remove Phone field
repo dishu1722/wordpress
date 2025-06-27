@@ -1,0 +1,8 @@
+# Add the code in the functions.php to remove the phone number field from the CHECKOUT PAGE
+
+add_filter( 'woocommerce_checkout_fields' , 'remove_billing_phone_field' );
+
+function remove_billing_phone_field( $fields ) {
+    unset($fields['billing']['billing_phone']); // Remove the phone field
+    return $fields;
+}
