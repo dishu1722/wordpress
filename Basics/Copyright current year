@@ -1,0 +1,17 @@
+// HTML code
+
+Copyright © <span id="spanyear"></span>
+
+
+.
+.
+.
+.
+
+
+
+// Script
+jQuery('#spanyear').html(new Date().getFullYear());
+
+
+
