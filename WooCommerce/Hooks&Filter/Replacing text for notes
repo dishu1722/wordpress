@@ -1,0 +1,22 @@
+// Replacing the text "Notes" to another label and textarea
+
+//script code
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const observer = new MutationObserver(() => {
+    // Change placeholder text
+    const textarea = document.querySelector('textarea[placeholder*="Notes about your order"]');
+    if (textarea) {
+      textarea.placeholder = "Write a message you want to say on the card...";
+    }
+
+    // Change label text
+    const label = document.querySelector('.wc-block-checkout__add-note label span');
+    if (label && label.innerText.includes("Add a note to your order")) {
+      label.innerText = "Card Message *";
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
