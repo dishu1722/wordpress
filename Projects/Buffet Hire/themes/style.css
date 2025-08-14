@@ -1,0 +1,30 @@
+/* Header cart icon */
+.menu-item.custom-menu-cart {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+.menu-item.custom-menu-cart .fas.fa-shopping-cart {
+    color: #041467CC;
+}
+.menu-item.custom-menu-cart .custom-cart-count {
+    background-color: #041467CC;
+    color: #fff;
+    font-size: 9px;
+    font-weight: bold;
+    padding: 2px;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -6px;
+    left: 15px;
+    line-height: normal;
+}
+.custom-cart-link {
+    position: relative;
+}
