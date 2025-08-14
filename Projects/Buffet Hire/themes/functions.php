@@ -23,7 +23,7 @@ function custom_cart_items_list() {
 }
 add_shortcode( 'cart_items_list', 'custom_cart_items_list' );
 
-//OR
+// OR
 function custom_cart_items_list() {
     // Only run on frontend and if WooCommerce cart is available
     if ( is_admin() ) {
