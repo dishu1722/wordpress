@@ -52,3 +52,28 @@ function custom_cart_items_list() {
     return nl2br( $output ); // Convert new lines to <br> for HTML output
 }
 add_shortcode( 'cart_items_list', 'custom_cart_items_list' );
+
+// Cart icon with count
+function custom_wc_cart_icon() {
+    ?>
+    <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="custom-cart-link">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="custom-cart-count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+    </a>
+    <?php
+}
+
+// Add cart markup to footer (so WooCommerce always has it loaded)
+add_action('wp_footer', function() {
+    echo '<div id="custom-cart-fragment" style="display:none;">';
+    custom_wc_cart_icon();
+    echo '</div>';
+});
+
+// Allow AJAX cart refresh
+add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
+    ob_start();
+    custom_wc_cart_icon();
+    $fragments['.custom-cart-link'] = ob_get_clean();
+    return $fragments;
+});
