@@ -1,3 +1,5 @@
+
+
 <?php
 
 // Adding the Category Title and Category image in the Category listing page
@@ -196,5 +198,21 @@ function tableware_package_related_shortcode() {
     return '';
 }
 add_shortcode( 'tableware_related', 'tableware_package_related_shortcode' );
+
+// Bookings For WooCommerce Plugin customization
+// To add Base cosr in the Product listing page
+add_action( 'woocommerce_after_shop_loop_item_title', 'inject_mwb_base_cost_price', 15 );
+function inject_mwb_base_cost_price() {
+    global $product;
+
+    if ( $product->get_type() === 'mwb_booking' ) {
+        $base_cost = get_post_meta( $product->get_id(), 'mwb_mbfw_booking_base_cost', true );
+
+        if ( $base_cost && $base_cost > 0 ) {
+            echo '<span class="price">' . wc_price( $base_cost ) . '</span>';
+        }
+    }
+}
+
 
 ?>
