@@ -26,6 +26,21 @@ function custom_woocommerce_price_html( $price, $product ) {
 }
 add_filter( 'woocommerce_get_price_html', 'custom_woocommerce_price_html', 10, 2 );
 
+// Moveing the product title to the top of the description side
+function move_product_title_above_page() {
+    if ( is_product() ) {
+        global $post;
+        echo '<div class="custom-title-wrapper">';
+        echo '<h1 class="custom-product-title">' . get_the_title($post->ID) . '</h1>';
+		echo '</div>';
+    }
+}
+// Remove default title from single product page
+remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+
+// Add title to the top of the page
+add_action( 'woocommerce_before_main_content', 'move_product_title_above_page', 5 );
+
 
 // Redirect the Cart page 'proceed to checkout' button to a custom URL
 add_action( 'template_redirect', function() {
