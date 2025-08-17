@@ -1,3 +1,24 @@
+<?php
+
+// Adding the Category Title and Category image in the Category listing page
+function custom_category_header() {
+    if ( is_product_category() ) {
+        $term = get_queried_object();
+        if ( $term && isset( $term->term_id ) ) {
+            $thumbnail_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+            $image_url = wp_get_attachment_url( $thumbnail_id );
+
+            echo '<div class="category-header">';
+            echo '<h1 class="category-title">' . esc_html( $term->name ) . '</h1>';
+
+            if ( !empty($image_url) ) {
+                echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $term->name ) . '" class="category-image">';
+            }
+            echo '</div>';
+        }
+    }
+}
+
 // Redirect the Cart page 'proceed to checkout' button to a custom URL
 add_action( 'template_redirect', function() {
     if ( is_checkout() && ! is_order_received_page() ) {
@@ -77,3 +98,5 @@ add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
     $fragments['.custom-cart-link'] = ob_get_clean();
     return $fragments;
 });
+
+?>
