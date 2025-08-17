@@ -19,6 +19,14 @@ function custom_category_header() {
     }
 }
 
+
+// Show some text with the price in shop page
+function custom_woocommerce_price_html( $price, $product ) {
+    return $price . ' per day';
+}
+add_filter( 'woocommerce_get_price_html', 'custom_woocommerce_price_html', 10, 2 );
+
+
 // Redirect the Cart page 'proceed to checkout' button to a custom URL
 add_action( 'template_redirect', function() {
     if ( is_checkout() && ! is_order_received_page() ) {
