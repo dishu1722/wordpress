@@ -26,7 +26,8 @@ function custom_woocommerce_price_html( $price, $product ) {
 }
 add_filter( 'woocommerce_get_price_html', 'custom_woocommerce_price_html', 10, 2 );
 
-// Moveing the product title to the top of the description side
+
+// Moving the product title to the top of the description side
 function move_product_title_above_page() {
     if ( is_product() ) {
         global $post;
@@ -49,6 +50,7 @@ add_action( 'template_redirect', function() {
         exit;
     }
 });
+
 
 // Shortcode to display WooCommerce cart items
 function custom_cart_items_list() {
@@ -97,6 +99,7 @@ function custom_cart_items_list() {
 }
 add_shortcode( 'cart_items_list', 'custom_cart_items_list' );
 
+
 // Cart icon with count
 function custom_wc_cart_icon() {
     ?>
@@ -106,14 +109,12 @@ function custom_wc_cart_icon() {
     </a>
     <?php
 }
-
 // Add cart markup to footer (so WooCommerce always has it loaded)
 add_action('wp_footer', function() {
     echo '<div id="custom-cart-fragment" style="display:none;">';
     custom_wc_cart_icon();
     echo '</div>';
 });
-
 // Allow AJAX cart refresh
 add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
     ob_start();
@@ -121,5 +122,79 @@ add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
     $fragments['.custom-cart-link'] = ob_get_clean();
     return $fragments;
 });
+
+
+// to add class in the body(single product) for a particular category
+add_filter( 'body_class', 'add_package_single_class_by_category' );
+function add_package_single_class_by_category( $classes ) {
+    if ( is_product() ) {
+        $terms = get_the_terms( get_the_ID(), 'product_cat' );
+        if ( $terms && ! is_wp_error( $terms ) ) {
+            foreach ( $terms as $term ) {
+                if ( strtolower( $term->name ) === 'tableware package' ) {
+                    $classes[] = 'package-single';
+                    break;
+                }
+            }
+        }
+    }
+    return $classes;
+}
+
+
+// To display Related products of particular category by SHORTCODE
+function tableware_package_related_shortcode() {
+    if ( ! is_product() ) return '';
+    global $product;
+	
+    $product_id = $product->get_id();
+    $terms = get_the_terms( $product_id, 'product_cat' );
+
+    if ( $terms && ! is_wp_error( $terms ) ) {
+        $has_tableware_package = false;
+
+        foreach ( $terms as $term ) {
+            if ( $term->slug === 'tableware-package' ) {
+                $has_tableware_package = true;
+                break;
+            }
+        }
+
+        if ( $has_tableware_package ) {
+            $args = array(
+                'post_type' => 'product',
+                'posts_per_page' => 4,
+                'post__not_in' => array( $product_id ),
+                'tax_query' => array(
+                    array(
+                        'taxonomy' => 'product_cat',
+                        'field'    => 'slug',
+                        'terms'    => 'tableware-package',
+                    ),
+                ),
+            );
+
+            $related_query = new WP_Query( $args );
+
+            if ( $related_query->have_posts() ) {
+                ob_start();
+                echo '<section class="related-products-tableware">';
+                echo '<div class="container">';
+                echo '<h2>Related Products</h2>';
+                echo '<ul class="products">';
+                while ( $related_query->have_posts() ) {
+                    $related_query->the_post();
+                    wc_get_template_part( 'content', 'product' );
+                }
+                echo '</ul></div></section>';
+                wp_reset_postdata();
+                return ob_get_clean();
+            }
+        }
+    }
+
+    return '';
+}
+add_shortcode( 'tableware_related', 'tableware_package_related_shortcode' );
 
 ?>
