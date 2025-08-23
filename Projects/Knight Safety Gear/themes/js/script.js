@@ -18,3 +18,37 @@ jQuery(document).ready(function($) {
 	$(this).css('visibility', 'visible'); //Make this div visibility hidden in css also
   });
 });
+
+
+// Updating the discount value according to the value in the given table(Fetch & display)
+document.addEventListener('DOMContentLoaded', function () {
+  const discountCell = document.querySelector('.price-comparison tr.highlight td:nth-child(4)');
+  const discountMatch = discountCell?.textContent.match(/\d+%/);
+  const actualDiscount = discountMatch ? discountMatch[0] : null;
+
+  function updateDiscountTextIfCaseSelected() {
+    const caseButton = document.querySelector('.button-variable-item-case');
+    const isCaseSelected = caseButton?.classList.contains('selected');
+
+    if (actualDiscount && isCaseSelected) {
+      document.querySelectorAll('.woocommerce-variation-description').forEach(descEl => {
+        descEl.innerHTML = descEl.innerHTML.replace(
+          /Enjoy a \d+% discount/, `Enjoy a ${actualDiscount} discount`);
+      });
+    }
+  }
+
+  // Initial check
+  updateDiscountTextIfCaseSelected();
+
+  // Re-check when variation changes
+  jQuery(document).on('found_variation', function () {
+    setTimeout(updateDiscountTextIfCaseSelected, 300);
+  });
+
+  // Re-check when user clicks the Case tab
+  const caseButton = document.querySelector('.button-variable-item-case');
+  caseButton?.addEventListener('click', function () {
+    setTimeout(updateDiscountTextIfCaseSelected, 300);
+  });
+});
