@@ -9,4 +9,12 @@ jQuery(document).ready(function($) {
     });
     container.empty().append(sortedItems);	
 	$('.product-select-bar').css('visibility', 'visible');  //Make this div visibility hidden in css also
+
+	// 	Removing the "27 units" showing on all product pages
+  $('.save-label').each(function() {
+    let text = $(this).text();
+    let cleaned = text.replace(/- *\$[\d,.]+ *\/Unit/, '');
+    $(this).text(cleaned.trim());
+	$(this).css('visibility', 'visible'); //Make this div visibility hidden in css also
+  });
 });
