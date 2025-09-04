@@ -46,3 +46,14 @@ document.addEventListener("DOMContentLoaded", function() {
         mobileHeader.appendChild(div);
     }
 });
+
+// Click any div to scroll to make ID listing
+jQuery(document).ready(function($) {
+    $('#themes-packages-tabs .filter-tab').on('click', function(e) {
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: $('#custom-product-grid').offset().top
+        }, 600); // 600 = animation speed in ms
+    });
+});
+
