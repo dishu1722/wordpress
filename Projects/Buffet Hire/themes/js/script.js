@@ -55,5 +55,13 @@ jQuery(document).ready(function($) {
             scrollTop: $('#custom-product-grid').offset().top
         }, 600); // 600 = animation speed in ms
     });
+
+    // adding buuton arrow to scroll to the color tabs
+    $('#back-to-filters').on('click', function(e) {
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: $('#themes-packages-tabs').offset().top
+        }, 650);
+    });
 });
 
