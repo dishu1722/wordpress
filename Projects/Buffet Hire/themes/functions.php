@@ -54,24 +54,7 @@ add_action( 'template_redirect', function() {
 });
 
 
-// Shortcode to display WooCommerce cart items
-function custom_cart_items_list() {
-    if ( WC()->cart->is_empty() ) return 'No items in cart.';
-    
-    $items = WC()->cart->get_cart();
-    $output = '';
-    foreach ( $items as $item => $values ) {
-        $product = $values['data']->get_name();
-        //$quantity = $values['quantity'];
-        //$price = wc_price( $values['data']->get_price() );
-        //$output .= $product . ' - Qty: ' . $quantity . ' - Price: ' . $price . "\n";
-        $output .= $product . "\n";
-    }
-    return $output;
-}
-add_shortcode( 'cart_items_list', 'custom_cart_items_list' );
-
-// OR
+// Shortcode to display WooCommerce cart items with quantity and url
 function custom_cart_items_list() {
     // Only run on frontend and if WooCommerce cart is available
     if ( is_admin() ) {
@@ -93,11 +76,15 @@ function custom_cart_items_list() {
     
     $items = WC()->cart->get_cart();
     $output = '';
-    foreach ( $items as $item => $values ) {
-        $product = $values['data']->get_name();
-        $output .= $product . "\n";
+    foreach ( $items as $item ) {
+        $product = $item['data'];
+		$product_id  = $item['product_id'];
+		$product_url = get_permalink( $product_id );
+		$product_name = $product->get_name();
+        $quantity = $item['quantity'];
+        $output .= $product_name . ' - Qty: ' . intval( $quantity ) . ' - ' . $product_url . "\n";
     }
-    return nl2br( $output ); // Convert new lines to <br> for HTML output
+    return $output; 
 }
 add_shortcode( 'cart_items_list', 'custom_cart_items_list' );
 
