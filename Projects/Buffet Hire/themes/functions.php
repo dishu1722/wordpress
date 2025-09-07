@@ -201,5 +201,26 @@ function inject_mwb_base_cost_price() {
     }
 }
 
+// Replace excerpt with price for product search results
+add_filter( 'the_excerpt', function( $excerpt ) {
+    if ( is_search() && get_post_type() === 'product' ) {
+        global $post;
+        $product = wc_get_product( $post->ID );
+
+        if ( $product ) {
+            if ( $product->get_type() === 'mwb_booking' ) {
+                $base_cost = get_post_meta( $product->get_id(), 'mwb_mbfw_booking_base_cost', true );
+                if ( $base_cost && $base_cost > 0 ) {
+                    return '<span class="price">' . wc_price( $base_cost ) . '</span>';
+                }
+            }
+
+            // Fallback for normal products
+            return '<span class="price">' . $product->get_price_html() . '</span>';
+        }
+    }
+
+    return $excerpt;
+}, 20 );
 
 ?>
