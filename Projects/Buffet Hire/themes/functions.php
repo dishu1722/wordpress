@@ -223,4 +223,14 @@ add_filter( 'the_excerpt', function( $excerpt ) {
     return $excerpt;
 }, 20 );
 
-?>
+// Force product image size in search results
+add_filter( 'post_thumbnail_html', function( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
+    if ( is_search() && get_post_type( $post_id ) === 'product' ) {
+        // Force WooCommerce product image to 600x600
+        $image = wp_get_attachment_image( $post_thumbnail_id, [600, 600], false, $attr );
+        if ( $image ) {
+            return $image;
+        }
+    }
+    return $html;
+}, 10, 5 );
