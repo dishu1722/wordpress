@@ -63,7 +63,7 @@
 
     if (region) {
         tooltip.css({ 
-            top: e.pageY - tooltip.outerHeight() - 10,
+            top: e.pageY - tooltip.outerHeight() - 5,
             left: e.pageX - tooltip.outerWidth()/2
         }).fadeIn(100);
     } else {
