@@ -1,5 +1,38 @@
-/* Css for the ZigZag style on right side of the div */
+/* Infinite Slider */
+h3.property-title {
+    font-family: "Cormorant Garamond", Sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 20px 0 10px;
+}
+.property-btn {
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #000;
+    font-family: "Inter", Sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1;
+    padding: 12px 24px;
+    text-align: center;
+    transition: all .3s;
+	margin: 12px 0 0;
+	display: inline-block;
+}
+.property-btn:hover {
+	background-color: #717133;
+	color: #fff;
+}
+.property-carousel .owl-stage{
+	padding-bottom: 15px;
+}
+.property-carousel  .property-image img {
+    height: 320px;
+    object-fit: cover;
+}
 
+
+/* Css for the ZigZag style on right side of the div */
 
 /* HTML code
 <div class="zigzag-sec"></div>
@@ -32,3 +65,5 @@
     clip-path: unset;
   }
 }
+
+
