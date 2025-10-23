@@ -65,3 +65,22 @@ jQuery(document).ready(function($) {
     });
 });
 
+// Cart items listing in WP form textarea
+ jQuery(document).ready(function($){
+    const targetFieldId = 'wpforms-4118-field_18'; // replace with your textarea field ID
+
+    function populateCartField() {
+        var cartContent = $('#cart-data-for-form').html().trim();
+        if(cartContent !== '') {
+            $('#' + targetFieldId).val(cartContent);
+        }
+    }
+    // Populate on page load
+    populateCartField();
+
+    // Optional: repopulate on cart update via fragments
+    $(document.body).on('wc_fragments_refreshed added_to_cart removed_from_cart', function(){
+        populateCartField();
+    });
+});
+
