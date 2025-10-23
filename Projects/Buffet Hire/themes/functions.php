@@ -54,39 +54,28 @@ add_action( 'template_redirect', function() {
 });
 
 
-// Shortcode to display WooCommerce cart items with quantity and url
+// Shortcode to display WooCommerce cart items
 function custom_cart_items_list() {
-    // Only run on frontend and if WooCommerce cart is available
-    if ( is_admin() ) {
-        // Don't run shortcode in admin area (like page editor)
-        return '';
-    }
+    if ( is_admin() || ! class_exists('WooCommerce') || ! WC()->cart ) return '';
 
-    if ( ! class_exists( 'WooCommerce' ) ) {
-        return 'WooCommerce not active.';
-    }
+    if ( WC()->cart->is_empty() ) return '';
 
-    if ( ! WC()->cart ) {
-        return 'Cart not initialized.';
-    }
-
-    if ( WC()->cart->is_empty() ) {
-        return 'No items in cart.';
-    }
-    
     $items = WC()->cart->get_cart();
     $output = '';
+
     foreach ( $items as $item ) {
         $product = $item['data'];
-		$product_id  = $item['product_id'];
-		$product_url = get_permalink( $product_id );
-		$product_name = $product->get_name();
+        $product_id = $item['product_id'];
+        $product_name = $product->get_name();
         $quantity = $item['quantity'];
-        $output .= $product_name . ' - Qty: ' . intval( $quantity ) . ' - ' . $product_url . "\n";
+        $product_url = get_permalink($product_id);
+
+        $output .= esc_html($product_name) . ' - Qty: ' . intval($quantity) . ' - ' . esc_url($product_url) . "<br>";
     }
-    return $output; 
+
+    return $output;
 }
-add_shortcode( 'cart_items_list', 'custom_cart_items_list' );
+add_shortcode('cart_items_list', 'custom_cart_items_list');
 
 
 // Cart icon with count
@@ -94,16 +83,26 @@ function custom_wc_cart_icon() {
     ?>
     <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="custom-cart-link">
         <i class="fas fa-shopping-cart"></i>
-        <span class="custom-cart-count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+        <span class="custom-cart-count"><?php echo WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?></span>
     </a>
     <?php
 }
+
+add_action('template_redirect', 'custom_wc_force_cart_init_safely', 5);
+function custom_wc_force_cart_init_safely() {
+    if ( function_exists('WC') && WC()->cart && ! is_admin() && ! wp_doing_ajax() && ! wp_doing_cron() ) {
+        WC()->cart->get_cart();
+    }
+}
+
+
 // Add cart markup to footer (so WooCommerce always has it loaded)
 add_action('wp_footer', function() {
     echo '<div id="custom-cart-fragment" style="display:none;">';
     custom_wc_cart_icon();
     echo '</div>';
 });
+
 // Allow AJAX cart refresh
 add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
     ob_start();
@@ -112,6 +111,12 @@ add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
     return $fragments;
 });
 
+// Load WooCommerce cart JS on all pages
+add_action('wp_enqueue_scripts', function() {
+    if ( function_exists('is_woocommerce') ) {
+        wp_enqueue_script('wc-cart-fragments');
+    }
+});
 
 // to add class in the body(single product) for a particular category
 add_filter( 'body_class', 'add_package_single_class_by_category' );
