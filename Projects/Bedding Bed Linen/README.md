@@ -92,6 +92,7 @@ The system integrates directly with WooCommerce so users can add selected items 
 ---
 
 ## 🗂️ Project Folder Structure (Recommended for GitHub)
+<pre>```
 Bedding Bed Linen/
 ├── themes/
 │   └── hello-elementor-child-theme/
@@ -110,7 +111,7 @@ Bedding Bed Linen/
 │   └── mobile-view.png
 ├── README.md
 └── .gitignore
- 
+```</pre>
 ---
 
 ## 📸 Screenshots
