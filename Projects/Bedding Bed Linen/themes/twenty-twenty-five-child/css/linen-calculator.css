@@ -1,0 +1,136 @@
+/* --- CUSTOM DAILY HIRE CALCULATOR STYLES --- */
+#daily-hire-calculator-container {
+    width: 100%;
+    max-width: 90%;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    font-family: Arial, sans-serif;
+}
+
+/* Define the Grid Structure (6 Columns) */
+.calculator-header,
+.calculator-row {
+    display: grid;
+    /* Define 6 columns: Item | Pickup Price | Daily Hire | Qty | Days | Cost */
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr; 
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+    text-align: center;
+}
+
+/* Header Styling */
+.calculator-header {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Row Styling */
+.calculator-row {
+    font-size: 0.9em;
+}
+
+.calculator-row:hover {
+    background-color: #f9f9f9;
+}
+
+/* Align Item Name to the left */
+.calculator-row .item-name {
+    text-align: left;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Input Group Styling (for Quantity and Days to Hire) */
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-group input[type="number"] {
+    width: 40px; /* Width of the number field */
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: 0 2px;
+    -moz-appearance: textfield; /* Hide default arrows in Firefox */
+}
+
+/* Hide default number input arrows in Webkit (Chrome/Safari) */
+.input-group input::-webkit-outer-spin-button,
+.input-group input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-group button {
+    background: #0073e6; /* Blue button */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.input-group button:hover {
+    background: #005bb5;
+}
+
+/* Total/Footer Styling */
+.calculator-footer {
+    display: flex;
+    justify-content: flex-end; /* Push content to the right */
+    align-items: center;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+}
+
+#total-cost {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-right: 20px;
+    color: #333;
+}
+
+#add-to-cart-button {
+    background-color: #4CAF50; /* Green button */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#add-to-cart-button:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+#add-to-cart-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* --- Checkout Page Display Styles --- */
+#calculated-pickup-date-input {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    padding: 8px;
+    width: 100%;
+}
