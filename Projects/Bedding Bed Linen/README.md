@@ -1,4 +1,3 @@
-## 🗂️ Project Folder Structure (Recommended for GitHub)
 # 🧺 Bedding & Bed Linen – Website Development (WordPress + WooCommerce + Custom Calculator)
 
 **Live Project:** [https://beddingbedlinen.com.au](https://beddingbedlinen.com.au)  
@@ -95,24 +94,22 @@ The system integrates directly with WooCommerce so users can add selected items 
 ## 🗂️ Project Folder Structure (Recommended for GitHub)
 Bedding Bed Linen/
 ├── themes/
- │    └── hello-elementor-child-theme/
- │         ├── functions.php
- │         ├── style.css
- │         ├── js/
- │         │    ├── linen-calculator.js
- │         │    ├── hire-checkout.js
- │         │    └── scripts.js
- │         └──  css/
- │               └── linen-calculator.css  
- │
- ├── screenshot-previews/
- │    ├── homepage.png
- │    ├── calculator.png
- │    ├── checkout.png
- │    └── mobile-view.png
- │
- ├── README.md
- └── .gitignore
+│   └── hello-elementor-child-theme/
+│       ├── functions.php
+│       ├── style.css
+│       ├── js/
+│       │   ├── linen-calculator.js
+│       │   ├── hire-checkout.js
+│       │   └── scripts.js
+│       └── css/
+│           └── linen-calculator.css
+├── screenshot-previews/
+│   ├── homepage.png
+│   ├── calculator.png
+│   ├── checkout.png
+│   └── mobile-view.png
+├── README.md
+└── .gitignore
  
 ---
 
