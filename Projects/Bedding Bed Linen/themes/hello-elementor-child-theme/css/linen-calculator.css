@@ -40,6 +40,7 @@ body .calculator-row:hover {
 body .calculator-row .item-name {
     text-align: left;
     color: #000;
+    font-weight: 600;
 }
 
 /* Input Group Styling (for Quantity and Days to Hire) */
@@ -50,12 +51,12 @@ body .calculator-row  .input-group {
 }
 
 body .calculator-row .input-group input[type="number"] {
-    width: 60px; 
+    width: 60px; /* Width of the number field */
     height: 30px;
     text-align: center;
     border: 1px solid #ccc;
     margin: 0 2px;
-    -moz-appearance: textfield; 
+    -moz-appearance: textfield; /* Hide default arrows in Firefox */
 }
 
 /* Hide default number input arrows in Webkit (Chrome/Safari) */
@@ -90,7 +91,7 @@ body .calculator-row  .input-group button:hover {
 /* Total/Footer Styling */
 body .calculator-footer {
     display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end; /* Push content to the right */
     align-items: center;
     padding: 15px;
     background-color: #f7f9fb;
@@ -221,31 +222,30 @@ body #calculated-pickup-date-input {
     /* Label each field */
     body .calculator-row span.item-name::before {
         content: "Item:";
-        font-weight: bold;
+        font-weight: 600;
     }
     body .pickup-price::before {
         content: "Pickup Price:";
-        font-weight: bold;
+        font-weight: 600;
     }
     body .daily-hire-price::before {
         content: "Daily Hire:";
-        font-weight: bold;
-        width: 100%;
+        font-weight: 600;
         text-align: left;
     }
     body .input-group:nth-of-type(1)::before {
         content: "Quantity:";
-        font-weight: bold;
+        font-weight: 600;
         margin-right: auto;
     }
     body .input-group:nth-of-type(2)::before {
         content: "Days to Hire:";
-        font-weight: bold;
+        font-weight: 600;
         margin-right: auto;
     }
     body .item-cost::before {
         content: "Cost:";
-        font-weight: bold;
+        font-weight: 600;
     }
 
     /* Inputs */
@@ -278,6 +278,17 @@ body #calculated-pickup-date-input {
         padding: 15px 0;
         font-size: 18px;
     }
+    body #daily-hire-calculator-container .calculator-row .item-name, 
+    body #daily-hire-calculator-container .calculator-row .pickup-price,
+    body #daily-hire-calculator-container .calculator-row .daily-hire-price,
+    body #daily-hire-calculator-container .calculator-row .item-cost   {
+    justify-content: flex-start !important;
+    column-gap: 5px;
+}
+.calculator-row .pickup-price .woocommerce-Price-amount, .calculator-row .daily-hire-price .woocommerce-Price-amount {
+    margin: 0;
+    line-height: 14px;
+}
 }
 
 /* -------- Extra Small Mobile (max-width: 480px) -------- */
