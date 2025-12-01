@@ -111,7 +111,7 @@ jQuery(document).ready(function($) {
             if (highest > syncedDays) syncedDays = highest;
 
             calculateTotalCost();
-        } else {
+            } else {
             // Days changed via buttons
             var qty = parseInt($quantityInput.val()) || 0;
 
@@ -122,6 +122,14 @@ jQuery(document).ready(function($) {
             }
 
             var daysVal = parseInt($daysInput.val()) || 0;
+
+            // NEW RULE: If user sets days to 0 → reset quantity and cost
+            if (daysVal === 0) {
+                $quantityInput.val(0);
+                calculateRowCost($row); 
+                calculateTotalCost();
+                return;
+            }
 
             // Update global syncedDays and sync to all selected rows
             if (daysVal > 0) {
@@ -157,6 +165,16 @@ jQuery(document).ready(function($) {
 
         // If days changed and row is selected, update global and sync
         if ($(this).hasClass('days-to-hire')) {
+        
+        // NEW RULE: If user manually types days = 0 → set qty = 0 and cost = 0
+    if (days === 0) {
+        $quantityInput.val(0);
+        calculateRowCost($row);
+        calculateTotalCost();
+        return;
+    }
+
+        
             if (days > 0) {
                 syncedDays = days;
                 syncDaysToAllSelectedRows(syncedDays);
