@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+# Allow folders you want to keep
+!themes/
+!screenshot-previews/
+!README.md
+!.gitignore
+
+# Allow all files inside these folders
+!themes/**
+!screenshot-previews/**
