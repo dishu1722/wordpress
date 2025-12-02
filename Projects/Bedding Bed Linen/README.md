@@ -116,19 +116,28 @@ Bedding Bed Linen/
 
 ## 📸 Screenshots
 Homepage:  
-![Homepage](screenshot-previews/homepage.png)
+![Homepage](screenshot-previews/Homepage.png)
 
-Calculator Section:  
-![Calculator](screenshot-previews/calculator.png)
+About:
+![About](screenshot-previews/About.png)
 
-Mobile Calculator View:  
-![Mobile View](screenshot-previews/mobile-view.png)
+Contact:
+![Contact](screenshot-previews/Contact.png)
+
+Cost Calculator:  
+![Cost Calculator](screenshot-previews/Cost-Calculator.png)
+
+Mobile Cost Calculator View:  
+![Mobile View](screenshot-previews/Cost-Calculator-mobile.png)
+
+FAQ:  
+![FAQ](screenshot-previews/FAQ.png)
 
 Checkout Page with Custom Fields:  
-![Checkout](screenshot-previews/checkout.png)
+![Checkout](screenshot-previews/Checkout.png)
 
-Cart Icon with Counter:  
-![Cart Icon](screenshot-previews/cart-icon.png)
+Cart Page + Cart Icon with Counter in Header:  
+![Cart](screenshot-previews/Cart.png)
 
 ---
 
