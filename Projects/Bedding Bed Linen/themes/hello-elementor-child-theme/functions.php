@@ -495,4 +495,13 @@ add_filter('woocommerce_is_purchasable', function($purchasable, $product){
     return $purchasable;
 }, 10, 2);
 
+// Redirect the WooCommerce Shop page to Cost Calculator page
+add_action( 'template_redirect', 'redirect_shop_to_calculator' );
+function redirect_shop_to_calculator() {
+
+    if ( is_shop() ) {
+        wp_redirect( home_url('/cost-calculator/') );
+        exit;
+    }
+}
 ?>
