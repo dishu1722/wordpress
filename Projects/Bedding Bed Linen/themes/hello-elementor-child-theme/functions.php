@@ -72,7 +72,7 @@ add_action('wp_enqueue_scripts', 'linen_calculator_assets');
 
 
 // =========================================================================
-// B. CALCULATOR SHORTCODE (Displays the Table)
+// CALCULATOR SHORTCODE (Displays the Table)
 // =========================================================================
 
 /**
@@ -158,7 +158,7 @@ add_shortcode( 'daily_hire_calculator', 'custom_daily_hire_calculator_shortcode'
 
 
 // =========================================================================
-// C. WOOCOMMERCE AJAX AND PRICING LOGIC
+// WOOCOMMERCE AJAX AND PRICING LOGIC
 // =========================================================================
 
 /**
@@ -263,7 +263,7 @@ add_filter( 'woocommerce_get_item_data', 'display_days_to_hire_cart_item_data', 
 
 
 // =========================================================================
-// D. CHECKOUT FIELD CUSTOMIZATION
+// CHECKOUT FIELD CUSTOMIZATION
 // =========================================================================
 
 /**
@@ -318,16 +318,26 @@ function linen_checkout_fields($fields) {
 
 
     // --- DAYS TO HIRE HIDDEN FIELD ---
-    if (!WC()->cart->is_empty()) {
-        $first_item = reset(WC()->cart->get_cart());
-        $days_to_hire = isset($first_item['days_to_hire']) ? $first_item['days_to_hire'] : 0;
+   if ( function_exists('WC') && WC()->cart && ! WC()->cart->is_empty() ) {
+
+    $cart_items = WC()->cart->get_cart();
+
+    if ( ! empty( $cart_items ) && is_array( $cart_items ) ) {
+
+        $first_item = reset( $cart_items );
+
+        $days_to_hire = isset($first_item['days_to_hire'])
+            ? $first_item['days_to_hire']
+            : 0;
 
         $fields['billing']['hire_info_days'] = array(
-            'type'    => 'hidden',
-            'default' => $days_to_hire,
+            'type'     => 'hidden',
+            'default'  => $days_to_hire,
             'priority' => 23,
         );
     }
+}
+
 
     return $fields;
 }
@@ -358,7 +368,8 @@ add_action('wp_enqueue_scripts', function () {
     if (is_checkout() && !is_wc_endpoint_url()) {
 
         if (!WC()->cart->is_empty()) {
-            $first_item = reset(WC()->cart->get_cart());
+         $cart_items = WC()->cart->get_cart();
+            $first_item = reset($cart_items);
             $days_to_hire = isset($first_item['days_to_hire']) ? $first_item['days_to_hire'] : 0;
 
             wp_localize_script(
@@ -397,7 +408,8 @@ function hire_checkout_assets() {
 
         // Pass Days to Hire from Cart → JS
         if (!WC()->cart->is_empty()) {
-            $first_item = reset(WC()->cart->get_cart());
+$cart_items = WC()->cart->get_cart();
+            $first_item = reset($cart_items);
             $days_to_hire = isset($first_item['days_to_hire']) ? $first_item['days_to_hire'] : 0;
 
             wp_localize_script(
@@ -455,7 +467,7 @@ add_filter( 'woocommerce_form_field', function( $field, $key, $args, $value ) {
     return $field;
 }, 10, 4 );
 
-// Create a shortcode for WooCommerce cart icon with count
+// 1. Create a shortcode for WooCommerce cart icon with count
 function custom_wc_cart_icon_shortcode() {
     ob_start();
     ?>
@@ -468,7 +480,7 @@ function custom_wc_cart_icon_shortcode() {
 }
 add_shortcode('custom_cart_icon', 'custom_wc_cart_icon_shortcode');
 
-// Enable AJAX refresh for dynamic cart count
+// 2. Enable AJAX refresh for dynamic cart count
 add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
     ob_start();
     ?>
@@ -504,4 +516,68 @@ function redirect_shop_to_calculator() {
         exit;
     }
 }
+
+// Add custom fields to WooCommerce emails
+add_filter( 'woocommerce_email_order_meta_fields', 'ds_add_dates_to_order_email', 10, 3 );
+function ds_add_dates_to_order_email( $fields, $sent_to_admin, $order ) {
+
+    $delivery_date = get_post_meta( $order->get_id(), '_delivery_date', true );
+    $delivery_time = get_post_meta( $order->get_id(), '_delivery_time', true );
+    $pickup_date   = get_post_meta( $order->get_id(), '_pickup_date', true );
+
+    if ( $delivery_date ) {
+        $fields['delivery_date'] = array(
+            'label' => 'Delivery Date',
+            'value' => $delivery_date,
+        );
+    }
+
+    if ( $delivery_time ) {
+        $fields['delivery_time'] = array(
+            'label' => 'Delivery Time',
+            'value' => $delivery_time,
+        );
+    }
+
+    if ( $pickup_date ) {
+        $fields['pickup_date'] = array(
+            'label' => 'Pickup Date',
+            'value' => $pickup_date,
+        );
+    }
+
+    return $fields;
+}
+add_filter( 'woocommerce_email_subject_new_order', 'ds_change_admin_email_subject', 10, 2 );
+function ds_change_admin_email_subject( $subject, $order ) {
+
+    return 'Bedding Bed Linen';
+
+}
+
+// Show Delivery Date, Delivery Time, and Pickup Date in Admin Order Details
+add_action( 'woocommerce_admin_order_data_after_billing_address', 'ds_show_order_custom_fields_admin', 10, 1 );
+function ds_show_order_custom_fields_admin( $order ) {
+
+    $delivery_date = get_post_meta( $order->get_id(), '_delivery_date', true );
+    $delivery_time = get_post_meta( $order->get_id(), '_delivery_time', true );
+    $pickup_date   = get_post_meta( $order->get_id(), '_pickup_date', true );
+
+    echo '<div class="order-custom-fields" style="padding:10px 0;">';
+
+    if ( $delivery_date ) {
+        echo '<p><strong>Delivery Date:</strong> ' . esc_html( $delivery_date ) . '</p>';
+    }
+
+    if ( $delivery_time ) {
+        echo '<p><strong>Delivery Time:</strong> ' . esc_html( $delivery_time ) . '</p>';
+    }
+
+    if ( $pickup_date ) {
+        echo '<p><strong>Pickup Date:</strong> ' . esc_html( $pickup_date ) . '</p>';
+    }
+
+    echo '</div>';
+}
+
 ?>
