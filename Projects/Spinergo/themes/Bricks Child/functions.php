@@ -84,29 +84,56 @@ add_action('woocommerce_after_variations_form', function() {
 });
 
 // Add add-on price to cart
-add_action('woocommerce_add_cart_item_data', function($cart_item_data, $product_id) {
-    if(isset($_POST['addon_silikonove_kolieska']) && $_POST['addon_silikonove_kolieska'] == '5') {
-        $cart_item_data['addon_silikonove_kolieska'] = 5; // store price
+/* 1. Save add-on when adding to cart */
+add_filter('woocommerce_add_cart_item_data', function ($cart_item_data, $product_id) {
+
+    if (isset($_POST['addon_silikonove_kolieska'])) {
+        $cart_item_data['addon_silikonove_kolieska'] = 5;
+        $cart_item_data['unique_key'] = md5(microtime()); // prevent merge
     }
+
     return $cart_item_data;
 }, 10, 2);
 
-// Display add-on in cart
-add_filter('woocommerce_get_item_data', function($item_data, $cart_item) {
-    if(isset($cart_item['addon_silikonove_kolieska'])) {
-        $item_data[] = array(
-            'name' => 'Silikónové kolieska',
-            'value' => '+ ' . wc_price($cart_item['addon_silikonove_kolieska'])
-        );
-    }
-    return $item_data;
-}, 10, 2);
 
-// Add add-on price to cart total
-add_action('woocommerce_before_calculate_totals', function($cart_obj) {
-    foreach($cart_obj->get_cart() as $key => $value) {
-        if(isset($value['addon_silikonove_kolieska'])) {
-            $value['data']->set_price($value['data']->get_price() + $value['addon_silikonove_kolieska']);
-        }
+/* 2. Add price safely (NO double calculation) */
+add_action('woocommerce_before_calculate_totals', function ($cart) {
+
+    if (is_admin() && !defined('DOING_AJAX')) return;
+    if (did_action('woocommerce_before_calculate_totals') >= 2) return;
+
+    foreach ($cart->get_cart() as $cart_item) {
+
+        if (!isset($cart_item['addon_silikonove_kolieska'])) continue;
+
+        $product = $cart_item['data'];
+        $addon   = (float) $cart_item['addon_silikonove_kolieska'];
+
+        // Get base price INCLUDING tax
+        $base_price = wc_get_price_including_tax($product, [
+            'qty'   => 1,
+            'price' => $product->get_regular_price()
+        ]);
+
+        // Set final price WITHOUT taxing addon
+        $product->set_price($base_price + $addon);
+
+        // Prevent WooCommerce from taxing this item again
+        $product->set_tax_status('none');
     }
 });
+
+
+
+/* 3. Show add-on in cart & checkout */
+add_filter('woocommerce_get_item_data', function ($item_data, $cart_item) {
+
+    if (isset($cart_item['addon_silikonove_kolieska'])) {
+        $item_data[] = [
+            'name'  => 'Doplnky',
+            'value' => 'Silikónové kolieska (+5€)'
+        ];
+    }
+
+    return $item_data;
+}, 10, 2);
